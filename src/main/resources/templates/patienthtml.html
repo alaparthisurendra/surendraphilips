@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Patient details</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Patient</h1>
+    <form action="#" th:action="@{//hospitals/{hospitalid}/patients/}" th:object="${/patient}" method="post">
+    	<p>Id: <input type="text" th:field="*{id}" /></p>
+        <p>Name: <input type="text" th:field="*{name}" /></p>
+        <p>DateofBirth: <input type="text" th:field="*{dateofbirth}" /></p>
+        <p>Gender: <input type="text" th:field="*{gender}" /></p>
+        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+    </form>
+</body>
+</html>
