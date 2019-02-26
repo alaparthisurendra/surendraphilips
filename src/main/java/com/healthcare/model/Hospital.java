@@ -1,5 +1,7 @@
 package com.healthcare.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,73 +12,78 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.http.ResponseEntity;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-public class Hospital {
+@Table(name = "hospital_tbl")
+public class Hospital implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6366524364998085948L;
 	@Id
-	@Column(name = "hid")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long hid;
-	
-
+	@Column(name = "hospital_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	@Column(name = "name")
-	@NotNull
 	private String name;
-
-	@NotNull
 	@Column(name = "description")
 	private String description;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "hospital_patient", joinColumns = { @JoinColumn(name = "hospital_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "patient_id") })
-	private List<Patient> patients;
 
-	public Hospital(Long hid, String name, String description, List<Patient> patients) {
-		super();
-		this.hid = hid;
-		this.name = name;
-		this.description = description;
-		this.patients = patients;
+
+
+	@OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
+	private List<Patient> patient=new ArrayList<>();
+	
+	public Long getId() {
+		return id;
 	}
-
-	public Hospital() {
-		super();
+	
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
-
-	public Long getHid() {
-		return hid;
-	}
-
-	public void setHid(Long hid) {
-		this.hid = hid;
-	}
-
+	
+	
 	public String getName() {
 		return name;
 	}
-
+	
+	
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	
 	public String getDescription() {
 		return description;
 	}
-
+	
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public List<Patient> getPatients() {
-		return patients;
+	
+	
+	public List<Patient> getPatient() {
+		return patient;
 	}
-
-	public void setPatients(List<Patient> patients) {
-		this.patients = patients;
+	
+	
+	public void setPatient(List<Patient> patient) {
+		this.patient = patient;
 	}
+	
+
+	
+
 
 }

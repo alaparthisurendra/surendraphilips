@@ -1,6 +1,8 @@
 package com.healthcare.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,57 +13,72 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
+@Table(name = "patient_tbl")
 public class Patient {
 	@Id
-	@Column(name = "pid")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long pid;
-
-	@NotNull
+	@Column(name = "patient_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	
+	private Long id;
+	
 	@Column(name = "name")
 	private String name;
-	@NotNull
-	@Column(name = "dateofbirth")
 
-	@NotNull
+	@Column
 	@Temporal(TemporalType.DATE)
 	private Date dateofbirth;
 
-	@NotNull
 	@Column(name = "gender")
 	private String gender;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "patient_examination", joinColumns = { @JoinColumn(name = "patient_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "examination_id") })
-	private List<Examination> examinations;
+	//@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
+	
+    //@NotFound(action = NotFoundAction.IGNORE)
+	@ManyToOne
+	@JsonIgnore
+	private Hospital hospital;
+
+	//fetch=FetchType.EAGER, 
+	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+	private List<Examination> examination=new ArrayList<>();
+	
+	
 
 	public Patient() {
 		super();
 	}
 
-	public Patient(Long pid, String name, Date dateofbirth, String gender, List<Examination> examinations) {
+	public Patient(Long id, String name, Date dateofbirth, String gender, Hospital hospital,
+			List<Examination> examination) {
 		super();
-		this.pid = pid;
+		this.id = id;
 		this.name = name;
 		this.dateofbirth = dateofbirth;
 		this.gender = gender;
-		this.examinations = examinations;
+		this.hospital = hospital;
+		this.examination = examination;
 	}
 
-	public Long getPid() {
-		return pid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setPid(Long pid) {
-		this.pid = pid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -88,12 +105,20 @@ public class Patient {
 		this.gender = gender;
 	}
 
-	public List<Examination> getExaminations() {
-		return examinations;
+	public Hospital getHospital() {
+		return hospital;
 	}
 
-	public void setExaminations(List<Examination> examinations) {
-		this.examinations = examinations;
+	public void setHospital(Hospital hospital) {
+		this.hospital = hospital;
+	}
+
+	public List<Examination> getExamination() {
+		return examination;
+	}
+
+	public void setExamination(List<Examination> examination) {
+		this.examination = examination;
 	}
 
 }

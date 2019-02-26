@@ -3,7 +3,6 @@ package com.healthcare.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,28 +16,37 @@ public class Hospitalservice {
 	@Autowired
 	HospitalRepository hospitalRepository;
 
-	public Hospital addHospital(Hospital hospital) {
-		return hospitalRepository.save(hospital);
+	// to save an hospital
+
+	public Hospital save(Hospital hospitals) {
+		return hospitalRepository.save(hospitals);
+
 	}
 
+	/* search all hospital */
 	public List<Hospital> getAllHospitals() {
 		List<Hospital> hospital = new ArrayList<>();
 		hospitalRepository.findAll().forEach(hospital::add);
-		;
 		return hospital;
+		// return hospitalRepository.findAll();
 	}
 
-	public Optional<Hospital> getHospitalById(Long id) {
-		return hospitalRepository.findById(id);
+	/* search by id */
+	public Hospital findById(Long hid) {
+		return hospitalRepository.getOne(hid);
+
 	}
 
-	public void delete(long hid) {
+	/* delete by id */
+	public void delete(Long hid) {
 		hospitalRepository.deleteById(hid);
-	}
 
-	public Hospital updateHospital(Long hid, Hospital hospital) {
-		hospital.setHid(hid);
+	}
+	public Hospital update(long hid, Hospital hospital)
+	{
+		hospital.setId(hid);
 		return hospitalRepository.save(hospital);
+		
 	}
 
 }
