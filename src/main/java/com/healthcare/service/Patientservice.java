@@ -64,7 +64,6 @@ public class Patientservice {
 
 	public void delete(Long pid) {
 		patientRepository.deleteById(pid);
-		;
 
 	}
 }
